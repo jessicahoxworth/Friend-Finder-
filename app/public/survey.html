@@ -146,7 +146,9 @@
                 </div>
                 <div class="modal-body">
                     <h2 id="match-name"></h2>
-                    <img id="match-img" src="https://unsplash.com/photos/qO-PIF84Vxg" alt="">
+                    <img id="match-img"
+                        src="https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                        alt="">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
@@ -155,35 +157,53 @@
         </div>
     </div>
 
-    <script>
+    <script> //captures survey inputs
         $("#submit").on("click", function (event) {
             event.preventDefault();
             console.log("Clicked!")
-            var userData = {
-                name: $("#name").val(),
-                photo: $("#photo").val(),
-                scores: [
-                    parseInt($("#q1").val()),
-                    parseInt($("#q2").val()),
-                    parseInt($("#q3").val()),
-                    parseInt($("#q4").val()),
-                    parseInt($("#q5").val()),
-                    parseInt($("#q6").val()),
-                    parseInt($("#q7").val()),
-                    parseInt($("#q8").val()),
-                    parseInt($("#q9").val()),
-                    parseInt($("#q10").val())
-                ]
-            };
-            // AJAX post request (to wherever we want) or to /api/friends
-            $.post("/api/friends", userData, function (data) {
-                $("#match-name").text(data.name);
-                $("#match-img").attr("src", data.photo);
 
-                $("#results-modal").modal("toggle");
+            function validateForm() {
+                var isValid = true;
+                $(".form-control").each(function () {
 
-            });
-        })
+                    if ($(this).val() == "") {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            }
+
+            if (validateForm()) {
+
+                var userData = {
+                    name: $("#name").val(),
+                    photo: $("#photo").val(),
+                    scores: [
+                        parseInt($("#q1").val()),
+                        parseInt($("#q2").val()),
+                        parseInt($("#q3").val()),
+                        parseInt($("#q4").val()),
+                        parseInt($("#q5").val()),
+                        parseInt($("#q6").val()),
+                        parseInt($("#q7").val()),
+                        parseInt($("#q8").val()),
+                        parseInt($("#q9").val()),
+                        parseInt($("#q10").val())
+                    ]
+                };
+                // AJAX post request (to wherever we want) or to /api/friends
+                $.post("/api/friends", userData, function (data) {
+                    $("#match-name").text(data.name);
+                    $("#match-img").attr("src", data.photo);
+
+                    $("#results-modal").modal("toggle");
+
+                });
+
+            } else {
+                alert("Oops! You left something blank!");
+            }
+        });
 
     </script>
 </body>
